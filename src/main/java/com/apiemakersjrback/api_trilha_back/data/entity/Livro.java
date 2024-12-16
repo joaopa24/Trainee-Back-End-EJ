@@ -24,7 +24,10 @@ public class Livro {
     private String autor;
 
     @Column(name = "data-de-lancamento",nullable = false, length = 45)
-    private Date date;
+    private Date data;
+
+    @Column(name = "situacao",nullable = true)
+    private boolean situacao;
 
     @OneToMany(mappedBy = "livro")
     private List<Emprestimo> emprestimos;
