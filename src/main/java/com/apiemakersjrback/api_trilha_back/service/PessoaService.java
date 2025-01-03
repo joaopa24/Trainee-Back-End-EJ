@@ -1,0 +1,85 @@
+package com.apiemakersjrback.api_trilha_back.service;
+
+import com.apiemakersjrback.api_trilha_back.data.dto.request.PessoaRequestDTO;
+import com.apiemakersjrback.api_trilha_back.data.dto.response.PessoaResponseDTO;
+import com.apiemakersjrback.api_trilha_back.data.entity.Pessoa;
+import com.apiemakersjrback.api_trilha_back.repository.PessoaRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Service
+public class PessoaService {
+
+    final PessoaRepository pessoaRepository;
+
+    // Injeção de dependência pelo construtor
+    public PessoaService(PessoaRepository pessoaRepository) {
+        this.pessoaRepository = pessoaRepository;
+    }
+
+    // Método para encontrar uma pessoa por ID
+    public PessoaResponseDTO encontrarPorId(Long idPessoa) {
+        Optional<Pessoa> pessoa = pessoaRepository.findById(idPessoa);
+        if (pessoa.isPresent()) {
+            return new PessoaResponseDTO(pessoa.get());
+        } else {
+            throw new RuntimeException("Pessoa não encontrada para o ID: " + idPessoa);
+        }
+    }
+
+    // Método para listar todas as pessoas
+    public List<PessoaResponseDTO> listarTodos() {
+        List<Pessoa> pessoas = pessoaRepository.findAll();
+        return pessoas.stream()
+                .map(PessoaResponseDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    // Método para registrar uma nova pessoa
+    public PessoaResponseDTO registrar(PessoaRequestDTO pessoaRequestDTO) {
+        Pessoa pessoa = new Pessoa();
+        pessoa.setNome(pessoaRequestDTO.nome());
+        pessoa.setCep(pessoaRequestDTO.cep());
+        pessoa.setEmail(pessoaRequestDTO.email());
+        
+        // Criptografar a senha antes de salvar
+        pessoa.setPassword(pessoaRequestDTO.password());
+
+        Pessoa pessoaSalva = pessoaRepository.save(pessoa);
+        return new PessoaResponseDTO(pessoaSalva);
+    }
+
+    // Método para atualizar uma pessoa existente
+    public PessoaResponseDTO atualizar(Long idPessoa, PessoaRequestDTO pessoaRequestDTO) {
+        Optional<Pessoa> pessoaExistente = pessoaRepository.findById(idPessoa);
+        if (pessoaExistente.isPresent()) {
+            Pessoa pessoa = pessoaExistente.get();
+            pessoa.setNome(pessoaRequestDTO.nome());
+            pessoa.setCep(pessoaRequestDTO.cep());
+            pessoa.setEmail(pessoaRequestDTO.email());
+
+            // Atualizar e criptografar a nova senha, se fornecida
+            pessoa.setPassword(pessoaRequestDTO.password());
+
+            Pessoa pessoaAtualizada = pessoaRepository.save(pessoa);
+            return new PessoaResponseDTO(pessoaAtualizada);
+        } else {
+            throw new RuntimeException("Pessoa não encontrada para o ID: " + idPessoa);
+        }
+    }
+
+    // Método para deletar uma pessoa
+    public String deletar(Long idPessoa) {
+        Optional<Pessoa> pessoa = pessoaRepository.findById(idPessoa);
+        if (pessoa.isPresent()) {
+            pessoaRepository.deleteById(idPessoa);
+            return "Pessoa deletada com sucesso!";
+        } else {
+            throw new RuntimeException("Pessoa não encontrada para o ID: " + idPessoa);
+        }
+    }
+}
