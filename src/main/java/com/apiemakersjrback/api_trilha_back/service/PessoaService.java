@@ -4,7 +4,7 @@ import com.apiemakersjrback.api_trilha_back.data.dto.request.PessoaRequestDTO;
 import com.apiemakersjrback.api_trilha_back.data.dto.response.PessoaResponseDTO;
 import com.apiemakersjrback.api_trilha_back.data.entity.Pessoa;
 import com.apiemakersjrback.api_trilha_back.repository.PessoaRepository;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
