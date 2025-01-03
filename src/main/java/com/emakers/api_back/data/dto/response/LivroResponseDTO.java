@@ -1,7 +1,7 @@
-package com.apiemakersjrback.api_trilha_back.data.dto.response;
+package com.emakers.api_back.data.dto.response;
 
-import com.apiemakersjrback.api_trilha_back.data.entity.Emprestimo;
-import com.apiemakersjrback.api_trilha_back.data.entity.Livro;
+import com.emakers.api_back.data.entity.Emprestimo;
+import com.emakers.api_back.data.entity.Livro;
 import java.util.List;
 
 public record LivroResponseDTO(

@@ -1,6 +1,6 @@
-package com.apiemakersjrback.api_trilha_back.data.dto.response;
+package com.emakers.api_back.data.dto.response;
 
-import com.apiemakersjrback.api_trilha_back.data.entity.Emprestimo;
+import com.emakers.api_back.data.entity.Emprestimo;
 import java.util.List;
 
 public record PessoaResponseDTO(
@@ -12,7 +12,7 @@ public record PessoaResponseDTO(
     List<Emprestimo> emprestimos
 
 ) {
-    public PessoaResponseDTO(com.apiemakersjrback.api_trilha_back.data.entity.Pessoa pessoa) {
+    public PessoaResponseDTO(com.emakers.api_back.data.entity.Pessoa pessoa) {
         this(
             pessoa.getIdPessoa(),
             pessoa.getNome(),

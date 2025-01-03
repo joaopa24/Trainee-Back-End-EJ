@@ -1,4 +1,4 @@
-package com.apiemakersjrback.api_trilha_back.data.entity;
+package com.emakers.api_back.data.entity;
 
 import java.util.List;
 import jakarta.persistence.*;

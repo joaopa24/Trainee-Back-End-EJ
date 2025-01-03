@@ -1,4 +1,4 @@
-package com.apiemakersjrback.api_trilha_back.data.dto.request;
+package com.emakers.api_back.data.dto.request;
 
 import java.sql.Date;
 import jakarta.validation.constraints.NotBlank;

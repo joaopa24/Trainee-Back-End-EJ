@@ -1,9 +1,9 @@
-package com.apiemakersjrback.api_trilha_back.service;
+package com.emakers.api_back.service;
 
-import com.apiemakersjrback.api_trilha_back.data.dto.request.PessoaRequestDTO;
-import com.apiemakersjrback.api_trilha_back.data.dto.response.PessoaResponseDTO;
-import com.apiemakersjrback.api_trilha_back.data.entity.Pessoa;
-import com.apiemakersjrback.api_trilha_back.repository.PessoaRepository;
+import com.emakers.api_back.data.dto.request.PessoaRequestDTO;
+import com.emakers.api_back.data.dto.response.PessoaResponseDTO;
+import com.emakers.api_back.data.entity.Pessoa;
+import com.emakers.api_back.repository.PessoaRepository;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 

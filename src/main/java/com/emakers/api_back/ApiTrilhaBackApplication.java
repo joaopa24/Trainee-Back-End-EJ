@@ -1,4 +1,4 @@
-package com.apiemakersjrback.api_trilha_back;
+package com.emakers.api_back;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 @SpringBootApplication
 //@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
-@EnableJpaRepositories(basePackages = "com.apiemakersjrback.api_trilha_back.repository")
+@EnableJpaRepositories(basePackages = "com.emakers.api_back.repository")
 public class ApiTrilhaBackApplication {
 
     public static void main(String[] args) {

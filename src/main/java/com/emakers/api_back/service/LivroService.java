@@ -1,9 +1,9 @@
-package com.apiemakersjrback.api_trilha_back.service;
+package com.emakers.api_back.service;
 
-import com.apiemakersjrback.api_trilha_back.data.dto.request.LivroRequestDTO;
-import com.apiemakersjrback.api_trilha_back.data.dto.response.LivroResponseDTO;
-import com.apiemakersjrback.api_trilha_back.data.entity.Livro;
-import com.apiemakersjrback.api_trilha_back.repository.LivroRepository;
+import com.emakers.api_back.data.dto.request.LivroRequestDTO;
+import com.emakers.api_back.data.dto.response.LivroResponseDTO;
+import com.emakers.api_back.data.entity.Livro;
+import com.emakers.api_back.repository.LivroRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

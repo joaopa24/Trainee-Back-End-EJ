@@ -1,6 +1,6 @@
-package com.apiemakersjrback.api_trilha_back.repository;
+package com.emakers.api_back.repository;
 
-import com.apiemakersjrback.api_trilha_back.data.entity.Livro;
+import com.emakers.api_back.data.entity.Livro;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package com.apiemakersjrback.api_trilha_back.controller;
+package com.emakers.api_back.controller;
 
 import java.util.List;
 
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.apiemakersjrback.api_trilha_back.data.dto.request.LivroRequestDTO;
-import com.apiemakersjrback.api_trilha_back.data.dto.response.LivroResponseDTO;
-import com.apiemakersjrback.api_trilha_back.service.LivroService;
+import com.emakers.api_back.data.dto.request.LivroRequestDTO;
+import com.emakers.api_back.data.dto.response.LivroResponseDTO;
+import com.emakers.api_back.service.LivroService;
 
 @RestController
 @RequestMapping("/livro")

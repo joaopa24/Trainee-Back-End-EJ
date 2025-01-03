@@ -1,4 +1,4 @@
-package com.apiemakersjrback.api_trilha_back.data.dto.request;
+package com.emakers.api_back.data.dto.request;
 
 import java.util.List;
 import jakarta.validation.constraints.Email;
