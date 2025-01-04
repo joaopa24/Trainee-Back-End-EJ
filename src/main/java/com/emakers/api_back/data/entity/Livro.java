@@ -17,17 +17,17 @@ public class Livro {
     @Column(nullable = false, unique = true)
     private long idLivro;
 
-    @Column(name = "nome",nullable = false, length = 45)
+    @Column(name = "nome",nullable = true, length = 45)
     private String nome;
 
-    @Column(name = "autor",nullable = false, length = 45)
+    @Column(name = "autor",nullable = true, length = 45)
     private String autor;
 
-    @Column(name = "data-de-lancamento",nullable = false, length = 45)
+    @Column(name = "data-de-lancamento",nullable = true, length = 45)
     private Date data;
 
     @Column(name = "situacao",nullable = true)
-    private boolean situacao;
+    private Boolean situacao;
 
     @OneToMany(mappedBy = "livro")
     private List<Emprestimo> emprestimos;

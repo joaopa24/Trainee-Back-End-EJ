@@ -2,6 +2,7 @@ package com.emakers.api_back.data.dto.response;
 
 import com.emakers.api_back.data.entity.Emprestimo;
 import com.emakers.api_back.data.entity.Livro;
+
 import java.util.List;
 
 public record LivroResponseDTO(
@@ -10,7 +11,7 @@ public record LivroResponseDTO(
     String nome,
     String autor,
     java.sql.Date data,
-    boolean situacao,
+    Boolean situacao,
     List<Emprestimo> emprestimos
 
 ) {
@@ -20,7 +21,7 @@ public record LivroResponseDTO(
             livro.getNome(),
             livro.getAutor(),
             livro.getData(),
-            livro.isSituacao(),
+            livro.getSituacao(),
             livro.getEmprestimos()
         );
     }

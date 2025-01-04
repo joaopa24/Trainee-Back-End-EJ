@@ -19,7 +19,7 @@ import com.emakers.api_back.data.dto.response.LivroResponseDTO;
 import com.emakers.api_back.service.LivroService;
 
 @RestController
-@RequestMapping("/livro")
+@RequestMapping("/livros")
 public class LivroController {
 
     private final LivroService livroService;
@@ -33,7 +33,7 @@ public class LivroController {
         return ResponseEntity.ok().body(livroService.encontrarPorId(idLivro));
     }
 
-    @GetMapping("/listar")
+    @GetMapping(value = "/listar")
     public ResponseEntity<List<LivroResponseDTO>> encontrarTodos() {
         return ResponseEntity.ok().body(livroService.listarTodos());
     }

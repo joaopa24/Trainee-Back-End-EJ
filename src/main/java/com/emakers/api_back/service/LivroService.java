@@ -4,6 +4,10 @@ import com.emakers.api_back.data.dto.request.LivroRequestDTO;
 import com.emakers.api_back.data.dto.response.LivroResponseDTO;
 import com.emakers.api_back.data.entity.Livro;
 import com.emakers.api_back.repository.LivroRepository;
+
+import jakarta.transaction.Transactional;
+
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,11 +35,16 @@ public class LivroService {
     }
 
     // Método para listar todos os livros
+    @Transactional
     public List<LivroResponseDTO> listarTodos() {
         List<Livro> livros = livroRepository.findAll();
+
+        // Inicializar a coleção emprestimos
+        livros.forEach(livro -> Hibernate.initialize(livro.getEmprestimos()));
+
         return livros.stream()
-                .map(LivroResponseDTO::new)
-                .collect(Collectors.toList());
+            .map(LivroResponseDTO::new)
+            .collect(Collectors.toList());
     }
 
     // Método para registrar um novo livro

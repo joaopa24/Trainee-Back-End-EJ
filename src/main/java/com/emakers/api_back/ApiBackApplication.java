@@ -11,7 +11,7 @@ import java.sql.SQLException;
 @SpringBootApplication
 //@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
 @EnableJpaRepositories(basePackages = "com.emakers.api_back.repository")
-public class ApiTrilhaBackApplication {
+public class ApiBackApplication {
 
     public static void main(String[] args) {
         // Testar a conexão com o banco de dados
@@ -28,7 +28,7 @@ public class ApiTrilhaBackApplication {
         }
 
         // Iniciar a aplicação Spring Boot
-        SpringApplication.run(ApiTrilhaBackApplication.class, args);
+        SpringApplication.run(ApiBackApplication.class, args);
     }
 
 }
