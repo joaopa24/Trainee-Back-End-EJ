@@ -2,6 +2,7 @@ package com.emakers.api_back;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.sql.Connection;
@@ -10,6 +11,7 @@ import java.sql.SQLException;
 
 @SpringBootApplication
 //@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
+//@SpringBootApplication ( exclude = {SecurityAutoConfiguration.class} )
 @EnableJpaRepositories(basePackages = "com.emakers.api_back.repository")
 public class ApiBackApplication {
 
