@@ -31,4 +31,13 @@ public class Livro {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "livro")
     private List<Emprestimo> emprestimos;
+
+
+    public boolean isDisponivel() {
+        return situacao;
+    }
+
+    public void setDisponivel(boolean situacao) {
+        this.situacao = situacao;
+    }
 }
