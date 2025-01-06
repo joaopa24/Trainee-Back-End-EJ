@@ -1,4 +1,4 @@
-package com.emakers.auth;
+package com.emakers.api_back.auth;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

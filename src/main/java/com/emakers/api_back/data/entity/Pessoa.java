@@ -35,7 +35,11 @@ public class Pessoa {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         this.password = passwordEncoder.encode(password);
     }
+    
+    //usar esse depois
+    //@OneToMany(mappedBy = "pessoa")
+    //private List<Emprestimo> emprestimos;
 
-    @OneToMany(mappedBy = "pessoa")
+    @OneToMany(mappedBy = "pessoa", fetch = FetchType.EAGER)
     private List<Emprestimo> emprestimos;
 }

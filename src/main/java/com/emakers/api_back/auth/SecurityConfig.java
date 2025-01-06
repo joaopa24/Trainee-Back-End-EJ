@@ -1,4 +1,4 @@
-package com.emakers.auth;
+package com.emakers.api_back.auth;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,14 +11,13 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())  // Desabilita o CSRF
             .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.DELETE, "/livro/deletar/{idLivro}").permitAll()  // Permite DELETE sem autenticação
-                        .anyRequest() // Exige autenticação para todas as outras requisições
+                        .requestMatchers(HttpMethod.POST, "/livro/registrar").permitAll()  // Permite DELETE sem autenticação
+                        .anyRequest().authenticated() // Exige autenticação para todas as outras requisições
                 );
         return http.build();
     }

@@ -9,9 +9,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-@SpringBootApplication
+//@SpringBootApplication
 //@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
-//@SpringBootApplication ( exclude = {SecurityAutoConfiguration.class} )
+@SpringBootApplication ( exclude = {SecurityAutoConfiguration.class} )
 @EnableJpaRepositories(basePackages = "com.emakers.api_back.repository")
 public class ApiBackApplication {
 

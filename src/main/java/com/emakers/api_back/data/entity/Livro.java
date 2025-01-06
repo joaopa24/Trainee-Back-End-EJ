@@ -29,6 +29,6 @@ public class Livro {
     @Column(name = "situacao",nullable = true)
     private Boolean situacao;
 
-    @OneToMany(mappedBy = "livro")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "livro")
     private List<Emprestimo> emprestimos;
 }
