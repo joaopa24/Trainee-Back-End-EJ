@@ -15,7 +15,7 @@ public interface PessoaRepository extends JpaRepository<Pessoa, Long> {
 
     // Método para verificar se uma pessoa já existe pelo email
     boolean existsByEmail(String email);
-
+    
     // Método para encontrar pessoas pelo nome (busca parcial)
     List<Pessoa> findByNomeContaining(String nome);
 }

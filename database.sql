@@ -12,6 +12,7 @@ CREATE TABLE Pessoa (
   cep CHAR(9) NOT NULL,
   email VARCHAR(80) NOT NULL UNIQUE, 
   password VARCHAR(100) NOT NULL
+  role VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE Emprestimo (
