@@ -8,13 +8,9 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -40,29 +36,24 @@ public class Pessoa implements UserDetails {
     @Column(name = "password", nullable = false, length = 100)
     private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "idPessoa"))
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    private Set<UserRole> roles = new HashSet<>();
+    // Alterado para uma única String representando o papel
+    @Column(name = "role", nullable = false)
+    private String role; // Papel do usuário, como "ROLE_ADMIN", "ROLE_USER", etc.
 
     @OneToMany(mappedBy = "pessoa", fetch = FetchType.EAGER)
     private List<Emprestimo> emprestimos;
 
     // Método para encriptar a senha usando BCrypt
     public void setPassword(String password) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        this.password = passwordEncoder.encode(password);
+        this.password = password;
     }
 
     // Implementação da interface UserDetails
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Aqui, os papéis são convertidos para SimpleGrantedAuthority, que são necessários para o Spring Security
-        return roles.stream()
-                    .map(role -> new SimpleGrantedAuthority(role.getRole()))
-                    .collect(Collectors.toList());
+        // Agora a autoridade é simplesmente o papel armazenado como String
+        return List.of(new SimpleGrantedAuthority(role));
     }
 
     @Override
@@ -72,7 +63,7 @@ public class Pessoa implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.email; // Aqui, você pode usar o login ou email como o identificador de usuário
+        return this.email; // Usamos o email como identificador único do usuário
     }
 
     @Override
@@ -93,5 +84,9 @@ public class Pessoa implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public String getRole() {
+        return role;
     }
 }

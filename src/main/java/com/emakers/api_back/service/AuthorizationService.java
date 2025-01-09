@@ -1,61 +1,55 @@
 package com.emakers.api_back.service;
 
-import com.emakers.api_back.data.entity.Pessoa;
+import com.emakers.api_back.data.dto.AuthenticationDTO;
 import com.emakers.api_back.repository.PessoaRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import org.springframework.stereotype.Service;
 
 @Service
-public class AuthorizationService {
+public class AuthorizationService implements UserDetailsService {
 
     @Autowired
-    private PessoaRepository pessoaRepository;
+    PessoaRepository repository;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private PasswordEncoder passwordEncoder;  // Certifique-se de que o PasswordEncoder está sendo injetado corretamente
 
-    // Carregar usuário pelo email (necessário para o Spring Security)
+    @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Pessoa pessoa = pessoaRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
-        return pessoa;  // A entidade Pessoa já implementa UserDetails
+        return repository.findByEmail(email);
     }
 
-    // Lógica para registrar um novo usuário
-    public Pessoa register(Pessoa pessoa) {
-        if (pessoaRepository.findByEmail(pessoa.getEmail()).isPresent()) {
-            throw new RuntimeException("Usuário já existe");
+    public boolean authenticate(AuthenticationDTO data) {
+    UserDetails user = repository.findByEmail(data.email());
+    System.out.println(user);
+        if (user == null) {
+            return false; 
         }
 
-        // Criptografar senha com BCryptPasswordEncoder
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String hashedPassword = passwordEncoder.encode(pessoa.getPassword());
-        pessoa.setPassword(hashedPassword);  // Salvar senha criptografada
-        return pessoaRepository.save(pessoa);
-    }
-
-    public Authentication authenticate(String email, String password) {
-        if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
-            throw new IllegalArgumentException("Email e senha não podem ser nulos ou vazios");
+        // Verificar se a senha fornecida corresponde à senha armazenada
+        System.out.println(data.password());
+        System.out.println("-----------");
+        System.out.println(user.getPassword());
+        if (!passwordEncoder.matches(data.password(), user.getPassword())) {
+            System.out.println("DEUUUUUUUUU ERRRADOOOOOOOOO");
+            return false;  // Senha inválida
         }
 
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(email, password);
-
-        Authentication authentication = authenticationManager.authenticate(authenticationToken);
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        return authentication;
+        UsernamePasswordAuthenticationToken authenticationToken = 
+        new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+        System.out.println(authenticationToken);
+        // Atualizar o SecurityContextHolder com o objeto de autenticação
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        
+        // Aqui você pode fazer o processo de autenticação, se necessário
+        return true;  // Autenticação bem-sucedida
     }
-
 
 }
