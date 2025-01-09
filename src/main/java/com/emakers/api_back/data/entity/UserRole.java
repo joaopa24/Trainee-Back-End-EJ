@@ -2,7 +2,7 @@ package com.emakers.api_back.data.entity;
 
 public enum UserRole {
     ADMIN("admin"),
-    USER("usuario");
+    USER("user");
 
     private String role;
 

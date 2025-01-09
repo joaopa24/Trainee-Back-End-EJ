@@ -5,7 +5,6 @@ import com.emakers.api_back.data.dto.AuthenticationDTO;
 import com.emakers.api_back.data.dto.response.LoginResponseDTO;
 import com.emakers.api_back.data.entity.Pessoa;
 import com.emakers.api_back.repository.PessoaRepository;
-import com.emakers.api_back.service.AuthorizationService;
 
 import jakarta.validation.Valid;
 

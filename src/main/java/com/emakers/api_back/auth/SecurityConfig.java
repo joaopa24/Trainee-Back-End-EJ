@@ -30,7 +30,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/auth/current").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/auth/current").hasAnyAuthority("admin","user")
+                        .requestMatchers(HttpMethod.POST, "/pessoas/{idPessoa}/emprestar/{idLivro}").hasAuthority("admin")
+                        .requestMatchers(HttpMethod.POST, "/pessoas/{idPessoa}/devolver/{idLivro}").hasAuthority("admin")
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
