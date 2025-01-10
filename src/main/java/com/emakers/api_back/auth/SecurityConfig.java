@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,9 +31,18 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+                        .requestMatchers(
+                    "/v1/api/get-token",
+                                "/swagger-ui.html",
+                                "/swagger-ui/*",
+                                "/v3/api-docs/**",
+                                "/swagger-resources/**",
+                                "/webjars/**").permitAll()
+                        .requestMatchers("/swagger-ui.html","/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()  // Permite acesso ao Swagger
                         .requestMatchers(HttpMethod.GET, "/auth/current").hasAnyAuthority("admin","user")
                         .requestMatchers(HttpMethod.POST, "/pessoas/{idPessoa}/emprestar/{idLivro}").hasAuthority("admin")
                         .requestMatchers(HttpMethod.POST, "/pessoas/{idPessoa}/devolver/{idLivro}").hasAuthority("admin")
+                        .requestMatchers(HttpMethod.GET, "/pessoas/listar").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
