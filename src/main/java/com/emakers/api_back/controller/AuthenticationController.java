@@ -3,6 +3,7 @@ package com.emakers.api_back.controller;
 import com.emakers.api_back.auth.TokenService;
 import com.emakers.api_back.data.dto.AuthenticationDTO;
 import com.emakers.api_back.data.dto.response.LoginResponseDTO;
+import com.emakers.api_back.data.dto.response.PessoaResponseDTO;
 import com.emakers.api_back.data.entity.Pessoa;
 import com.emakers.api_back.repository.PessoaRepository;
 
@@ -75,17 +76,25 @@ public class AuthenticationController {
     // Endpoint para verificar se o usuário está autenticado
     @GetMapping("/current")
     public ResponseEntity<?> getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-
-        // Se o usuário estiver autenticado, retorne os detalhes dele
-        Pessoa currentUser = (Pessoa) authentication.getPrincipal();
-        
-        // Alternativamente, você pode verificar se o objeto é do tipo Pessoa
-        if (currentUser instanceof Pessoa) {
-            return new ResponseEntity<>(currentUser, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Erro ao recuperar o usuário", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    // Verifica se a autenticação está presente
+    if (authentication == null || !authentication.isAuthenticated()) {
+        return new ResponseEntity<>("Usuário não autenticado", HttpStatus.UNAUTHORIZED);
     }
+
+    // Recupera o usuário autenticado (Pessoa)
+    Pessoa currentUser = (Pessoa) authentication.getPrincipal();
+
+    // Verifica se o objeto é uma instância de Pessoa
+    if (currentUser instanceof Pessoa) {
+        // Converte a entidade Pessoa para PessoaResponseDTO
+        PessoaResponseDTO responseDTO = new PessoaResponseDTO(currentUser);
+
+        // Retorna o DTO como resposta
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    } else {
+        return new ResponseEntity<>("Erro ao recuperar o usuário", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
 }

@@ -55,4 +55,12 @@ public class LivroController {
     public ResponseEntity<String> deletar(@PathVariable Long idLivro) {
         return ResponseEntity.ok().body(livroService.deletar(idLivro));
     }
+
+    @PostMapping("/registrar/{isbn}")
+    public ResponseEntity<LivroResponseDTO> registrarPorIsbn(@PathVariable String isbn) {
+        System.out.println("cuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu");
+        System.out.println(isbn);
+        return ResponseEntity.ok().body(livroService.registrarPorIsbn(isbn));
+    }
+
 }

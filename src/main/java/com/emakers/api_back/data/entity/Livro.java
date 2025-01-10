@@ -37,7 +37,16 @@ public class Livro {
         return situacao;
     }
 
+    public void setDate(Date data){
+        this.data = data;
+    }
+
     public void setDisponivel(boolean situacao) {
         this.situacao = situacao;
+    }
+
+    public void setDate(java.util.Date data2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setDate'");
     }
 }

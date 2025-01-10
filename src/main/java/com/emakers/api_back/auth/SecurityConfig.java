@@ -43,6 +43,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/pessoas/{idPessoa}/emprestar/{idLivro}").hasAuthority("admin")
                         .requestMatchers(HttpMethod.POST, "/pessoas/{idPessoa}/devolver/{idLivro}").hasAuthority("admin")
                         .requestMatchers(HttpMethod.GET, "/pessoas/listar").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/livros/registrar/{isbn}").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

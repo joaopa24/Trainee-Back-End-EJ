@@ -1,6 +1,7 @@
 package com.emakers.api_back.service;
 
 import com.emakers.api_back.data.dto.request.LivroRequestDTO;
+import com.emakers.api_back.data.dto.response.LivroApiResponseDTO;
 import com.emakers.api_back.data.dto.response.LivroResponseDTO;
 import com.emakers.api_back.data.entity.Livro;
 import com.emakers.api_back.repository.LivroRepository;
@@ -19,9 +20,11 @@ public class LivroService {
 
     final LivroRepository livroRepository;
 
-    // Injeção de dependência pelo construtor
-    public LivroService(LivroRepository livroRepository) {
+    final LivroApiService livroApiService;  // Adicionar o serviço da API
+
+    public LivroService(LivroRepository livroRepository, LivroApiService livroApiService) {
         this.livroRepository = livroRepository;
+        this.livroApiService = livroApiService;
     }
 
     // Método para encontrar um livro por ID
@@ -86,4 +89,23 @@ public class LivroService {
             throw new RuntimeException("Livro não encontrado para o ID: " + idLivro);
         }
     }
+       public LivroResponseDTO registrarPorIsbn(String isbn) {
+
+        LivroApiResponseDTO livroApiResponse = livroApiService.buscarLivroPorIsbn(isbn);
+
+        Livro livro = new Livro();
+        livro.setNome(livroApiResponse.getTitle());
+        livro.setAutor(String.join(", ", livroApiResponse.getAuthors()));
+
+        int ano = livroApiResponse.getYear();
+        String data = ano + "-01-01";
+        System.out.println(data);
+        livro.setData(java.sql.Date.valueOf(String.valueOf(data)));
+        livro.setSituacao(true); 
+
+        Livro livroSalvo = livroRepository.save(livro);
+
+        return new LivroResponseDTO(livroSalvo);
+    }
+    
 }
