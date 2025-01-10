@@ -35,7 +35,8 @@ public class AuthenticationController {
     @Autowired
     private PessoaRepository repository;
 
-     @PostMapping("/login")
+     @SuppressWarnings("rawtypes")
+    @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data){
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
