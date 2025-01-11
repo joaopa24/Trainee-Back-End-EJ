@@ -27,7 +27,9 @@ mvn clean install
 ```
 
 ### Executando
+```bash
 mvn spring-boot:run
+```
 
 ## Documentação
 A API está documentada com o Swagger. Após iniciar a aplicação, acesse a interface do Swagger para visualizar e testar os endpoints da API em:
