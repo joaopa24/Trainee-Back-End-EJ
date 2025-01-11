@@ -19,4 +19,9 @@ public record LivroRequestDTO (
     Date data,
     
     boolean situacao
-) {}
+) {
+
+    public String getTitulo() {
+        return nome;
+    }
+}

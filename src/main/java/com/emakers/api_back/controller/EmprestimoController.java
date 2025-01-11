@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.emakers.api_back.data.dto.response.EmprestimoResponseDTO;
 import com.emakers.api_back.service.EmprestimoService;
+import com.emakers.api_back.api.BadRequestException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,8 +34,14 @@ public class EmprestimoController {
     public ResponseEntity<EmprestimoResponseDTO> pegarLivroEmprestado(
         @Parameter(description = "ID da pessoa que está pegando o livro emprestado") @PathVariable Long idPessoa, 
         @Parameter(description = "ID do livro que está sendo emprestado") @PathVariable Long idLivro) {
-        EmprestimoResponseDTO emprestimo = emprestimoService.pegarEmprestado(idPessoa, idLivro); // Chama o serviço
-        return ResponseEntity.ok(emprestimo);
+        try {
+            EmprestimoResponseDTO emprestimo = emprestimoService.pegarEmprestado(idPessoa, idLivro); // Chama o serviço
+            return ResponseEntity.ok(emprestimo);
+        } catch (BadRequestException ex) {
+            throw new BadRequestException("Erro ao pegar o livro emprestado: " + ex.getMessage());
+        } catch (Exception ex) {
+            throw new BadRequestException("Erro inesperado ao pegar o livro emprestado.");
+        }
     }
 
     @Operation(summary = "Devolver livro", description = "Permite que uma pessoa devolva um livro emprestado.")
@@ -48,7 +55,13 @@ public class EmprestimoController {
     public ResponseEntity<EmprestimoResponseDTO> devolverLivro(
         @Parameter(description = "ID da pessoa que está devolvendo o livro") @PathVariable Long idPessoa, 
         @Parameter(description = "ID do livro que está sendo devolvido") @PathVariable Long idLivro) {
-        EmprestimoResponseDTO emprestimo = emprestimoService.devolverLivro(idPessoa, idLivro);
-        return ResponseEntity.ok(emprestimo);
+        try {
+            EmprestimoResponseDTO emprestimo = emprestimoService.devolverLivro(idPessoa, idLivro);
+            return ResponseEntity.ok(emprestimo);
+        } catch (BadRequestException ex) {
+            throw new BadRequestException("Erro ao devolver o livro: " + ex.getMessage());
+        } catch (Exception ex) {
+            throw new BadRequestException("Erro inesperado ao devolver o livro.");
+        }
     }
 }

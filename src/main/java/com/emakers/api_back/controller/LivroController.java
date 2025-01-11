@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.emakers.api_back.data.dto.request.LivroRequestDTO;
 import com.emakers.api_back.data.dto.response.LivroResponseDTO;
 import com.emakers.api_back.service.LivroService;
+import com.emakers.api_back.api.BadRequestException;  // Importando a exceção personalizada
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -40,7 +41,11 @@ public class LivroController {
     })
     @GetMapping("/{idLivro}")
     public ResponseEntity<LivroResponseDTO> encontrarPorId(@Parameter(description = "ID do livro a ser encontrado") @PathVariable Long idLivro) {
-        return ResponseEntity.ok().body(livroService.encontrarPorId(idLivro));
+        LivroResponseDTO livro = livroService.encontrarPorId(idLivro);
+        if (livro == null) {
+            throw new BadRequestException("Livro não encontrado");
+        }
+        return ResponseEntity.ok().body(livro);
     }
 
     @Operation(summary = "Listar todos os livros", description = "Retorna a lista de todos os livros cadastrados.")
@@ -52,7 +57,11 @@ public class LivroController {
     })
     @GetMapping(value = "/listar")
     public ResponseEntity<List<LivroResponseDTO>> encontrarTodos() {
-        return ResponseEntity.ok().body(livroService.listarTodos());
+        List<LivroResponseDTO> livros = livroService.listarTodos();
+        if (livros.isEmpty()) {
+            throw new BadRequestException("Nenhum livro encontrado");
+        }
+        return ResponseEntity.ok().body(livros);
     }
 
     @Operation(summary = "Registrar novo livro", description = "Cadastra um novo livro no sistema.")
@@ -64,7 +73,11 @@ public class LivroController {
     })
     @PostMapping("/registrar")
     public ResponseEntity<LivroResponseDTO> registrar(@RequestBody LivroRequestDTO livroRequestDTO) {
-        return ResponseEntity.ok().body(livroService.registrar(livroRequestDTO));
+        if (livroRequestDTO == null || livroRequestDTO.getTitulo().isEmpty()) {
+            throw new BadRequestException("Dados inválidos para o livro");
+        }
+        LivroResponseDTO livro = livroService.registrar(livroRequestDTO);
+        return ResponseEntity.ok().body(livro);
     }
 
     @Operation(summary = "Atualizar livro", description = "Atualiza os detalhes de um livro existente.")
@@ -79,7 +92,11 @@ public class LivroController {
         @Parameter(description = "ID do livro a ser atualizado") @PathVariable Long idLivro,
         @RequestBody LivroRequestDTO livroRequestDTO
     ) {
-        return ResponseEntity.ok().body(livroService.atualizar(idLivro, livroRequestDTO));
+        LivroResponseDTO livro = livroService.atualizar(idLivro, livroRequestDTO);
+        if (livro == null) {
+            throw new BadRequestException("Livro não encontrado para atualização");
+        }
+        return ResponseEntity.ok().body(livro);
     }
 
     @Operation(summary = "Deletar livro", description = "Remove um livro do sistema.")
@@ -89,7 +106,11 @@ public class LivroController {
     })
     @DeleteMapping("/deletar/{idLivro}")
     public ResponseEntity<String> deletar(@Parameter(description = "ID do livro a ser deletado") @PathVariable Long idLivro) {
-        return ResponseEntity.ok().body(livroService.deletar(idLivro));
+        boolean deleted = livroService.deletar(idLivro);
+        if (!deleted) {
+            throw new BadRequestException("Livro não encontrado para deletar");
+        }
+        return ResponseEntity.ok().body("Livro deletado com sucesso");
     }
 
     @Operation(summary = "Registrar livro por ISBN", description = "Registra um livro no sistema a partir de seu ISBN.")
@@ -101,6 +122,10 @@ public class LivroController {
     })
     @PostMapping("/registrar/{isbn}")
     public ResponseEntity<LivroResponseDTO> registrarPorIsbn(@Parameter(description = "ISBN do livro a ser registrado") @PathVariable String isbn) {
-        return ResponseEntity.ok().body(livroService.registrarPorIsbn(isbn));
+        if (isbn == null || isbn.isEmpty()) {
+            throw new BadRequestException("ISBN inválido");
+        }
+        LivroResponseDTO livro = livroService.registrarPorIsbn(isbn);
+        return ResponseEntity.ok().body(livro);
     }
 }

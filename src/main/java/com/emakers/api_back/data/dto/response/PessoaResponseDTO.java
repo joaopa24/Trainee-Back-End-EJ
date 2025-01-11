@@ -1,6 +1,7 @@
 package com.emakers.api_back.data.dto.response;
 
 import com.emakers.api_back.data.entity.Pessoa;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,9 +18,11 @@ public record PessoaResponseDTO(
             pessoa.getNome(),
             pessoa.getCep(),
             pessoa.getEmail(),
-            pessoa.getEmprestimos().stream()
-                .map(EmprestimoResponseDTO::new)
-                .collect(Collectors.toList())
+            pessoa.getEmprestimos() != null && !pessoa.getEmprestimos().isEmpty() 
+                ? pessoa.getEmprestimos().stream()
+                    .map(EmprestimoResponseDTO::new)
+                    .collect(Collectors.toList())
+                : Collections.emptyList()  // Retorna uma lista vazia caso não haja empréstimos
         );
     }
 }

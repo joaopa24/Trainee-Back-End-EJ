@@ -46,13 +46,17 @@ public class AuthenticationController {
         @ApiResponse(responseCode = "400", description = "Dados de login inválidos")
     })
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
-        var auth = this.authenticationManager.authenticate(usernamePassword);
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data) {
+        try {
+            var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
+            var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        var token = tokenService.generateToken((Pessoa) auth.getPrincipal());
+            var token = tokenService.generateToken((Pessoa) auth.getPrincipal());
 
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+            return ResponseEntity.ok(new LoginResponseDTO(token));
+        } catch (Exception ex) {
+            throw new BadRequestException("Dados de login inválidos");
+        }
     }
 
     @Operation(summary = "Registro de novo usuário", description = "Cria um novo usuário no sistema.")
@@ -84,14 +88,14 @@ public class AuthenticationController {
     @Operation(summary = "Verificar usuário autenticado", description = "Retorna os dados do usuário atualmente autenticado.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Usuário autenticado retornado com sucesso"),
-        @ApiResponse(responseCode = "401", description = "Usuário não autenticado")
+        @ApiResponse(responseCode = "403", description = "Usuário não autenticado")
     })
     @GetMapping("/current")
     public ResponseEntity<?> getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
-            return new ResponseEntity<>("Usuário não autenticado", HttpStatus.UNAUTHORIZED);
+            throw new BadRequestException("Usuário não autenticado");
         }
 
         Pessoa currentUser = (Pessoa) authentication.getPrincipal();

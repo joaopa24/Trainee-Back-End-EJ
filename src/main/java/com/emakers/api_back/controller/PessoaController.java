@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import com.emakers.api_back.data.dto.request.PessoaRequestDTO;
 import com.emakers.api_back.data.dto.response.PessoaResponseDTO;
 import com.emakers.api_back.service.PessoaService;
+import com.emakers.api_back.api.BadRequestException;  // Importando a exceção personalizada
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -36,7 +37,11 @@ public class PessoaController {
     )
     @GetMapping("/{idPessoa}")
     public ResponseEntity<PessoaResponseDTO> encontrarPorId(@Parameter(description = "ID da pessoa") @PathVariable Long idPessoa) {
-        return ResponseEntity.ok().body(pessoaService.encontrarPorId(idPessoa));
+        PessoaResponseDTO pessoa = pessoaService.encontrarPorId(idPessoa);
+        if (pessoa == null) {
+            throw new BadRequestException("Pessoa não encontrada com ID: " + idPessoa);
+        }
+        return ResponseEntity.ok().body(pessoa);
     }
 
     // Endpoint para listar todas as pessoas
@@ -49,7 +54,11 @@ public class PessoaController {
     )
     @GetMapping("/listar")
     public ResponseEntity<List<PessoaResponseDTO>> listarTodos() {
-        return ResponseEntity.ok().body(pessoaService.listarTodos());
+        List<PessoaResponseDTO> pessoas = pessoaService.listarTodos();
+        if (pessoas.isEmpty()) {
+            throw new BadRequestException("Nenhuma pessoa encontrada");
+        }
+        return ResponseEntity.ok().body(pessoas);
     }
 
     // Endpoint para registrar uma nova pessoa
@@ -63,7 +72,11 @@ public class PessoaController {
     )
     @PostMapping("/registrar")
     public ResponseEntity<PessoaResponseDTO> registrar(@RequestBody @Parameter(description = "Dados da nova pessoa") PessoaRequestDTO pessoaRequestDTO) {
-        return ResponseEntity.ok().body(pessoaService.registrar(pessoaRequestDTO));
+        if (pessoaRequestDTO == null || pessoaRequestDTO.nome() == null || pessoaRequestDTO.nome().isEmpty()) {
+            throw new BadRequestException("Dados inválidos para o registro da pessoa");
+        }
+        PessoaResponseDTO pessoa = pessoaService.registrar(pessoaRequestDTO);
+        return ResponseEntity.ok().body(pessoa);
     }
 
     // Endpoint para atualizar uma pessoa existente
@@ -80,7 +93,11 @@ public class PessoaController {
         @Parameter(description = "ID da pessoa") @PathVariable Long idPessoa,
         @RequestBody @Parameter(description = "Dados para atualização da pessoa") PessoaRequestDTO pessoaRequestDTO
     ) {
-        return ResponseEntity.ok().body(pessoaService.atualizar(idPessoa, pessoaRequestDTO));
+        PessoaResponseDTO pessoa = pessoaService.atualizar(idPessoa, pessoaRequestDTO);
+        if (pessoa == null) {
+            throw new BadRequestException("Pessoa não encontrada para atualização com ID: " + idPessoa);
+        }
+        return ResponseEntity.ok().body(pessoa);
     }
 
     // Endpoint para deletar uma pessoa
@@ -94,6 +111,10 @@ public class PessoaController {
     )
     @DeleteMapping("/deletar/{idPessoa}")
     public ResponseEntity<String> deletar(@Parameter(description = "ID da pessoa") @PathVariable Long idPessoa) {
-        return ResponseEntity.ok().body(pessoaService.deletar(idPessoa));
+        boolean deleted = pessoaService.deletar(idPessoa);
+        if (!deleted) {
+            throw new BadRequestException("Pessoa não encontrada para deletar com ID: " + idPessoa);
+        }
+        return ResponseEntity.ok().body("Pessoa deletada com sucesso");
     }
 }

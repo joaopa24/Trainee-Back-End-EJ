@@ -21,7 +21,6 @@ public record PessoaRequestDTO(
     @Size(max = 80, message = "O email não pode ter mais de 80 caracteres")
     String email,
 
-    @NotBlank(message = "A senha é obrigatória")
     @Size(min = 8, max = 100, message = "A senha deve ter entre 8 e 100 caracteres")
     String password,
 
@@ -30,7 +29,14 @@ public record PessoaRequestDTO(
 
     // Método para encriptar a senha usando BCrypt
     public PessoaRequestDTO {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        password = passwordEncoder.encode(password);
+        if (password != null && !password.isEmpty()) {
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            password = passwordEncoder.encode(password);
+        }
+
+         // Se emprestimos for null, inicialize como uma lista vazia
+         if (emprestimos == null) {
+            emprestimos = List.of();  // Inicializa a lista vazia
+        }
     }
 }

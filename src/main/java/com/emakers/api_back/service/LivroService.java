@@ -80,11 +80,11 @@ public class LivroService {
     }
 
     // Método para deletar um livro
-    public String deletar(Long idLivro) {
+    public boolean deletar(Long idLivro) {
         Optional<Livro> livro = livroRepository.findById(idLivro);
         if (livro.isPresent()) {
             livroRepository.deleteById(idLivro);
-            return "Livro deletado com sucesso!";
+            return true;
         } else {
             throw new RuntimeException("Livro não encontrado para o ID: " + idLivro);
         }

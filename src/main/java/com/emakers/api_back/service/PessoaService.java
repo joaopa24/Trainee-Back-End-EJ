@@ -44,7 +44,8 @@ public class PessoaService {
         pessoa.setNome(pessoaRequestDTO.nome());
         pessoa.setCep(pessoaRequestDTO.cep());
         pessoa.setEmail(pessoaRequestDTO.email());
-        
+
+        pessoa.setRole("user");
         // Criptografar a senha antes de salvar
         pessoa.setPassword(pessoaRequestDTO.password());
 
@@ -54,29 +55,34 @@ public class PessoaService {
 
     // Método para atualizar uma pessoa existente
     public PessoaResponseDTO atualizar(Long idPessoa, PessoaRequestDTO pessoaRequestDTO) {
-        Optional<Pessoa> pessoaExistente = pessoaRepository.findById(idPessoa);
-        if (pessoaExistente.isPresent()) {
-            Pessoa pessoa = pessoaExistente.get();
-            pessoa.setNome(pessoaRequestDTO.nome());
-            pessoa.setCep(pessoaRequestDTO.cep());
-            pessoa.setEmail(pessoaRequestDTO.email());
+    Optional<Pessoa> pessoaExistente = pessoaRepository.findById(idPessoa);
+    if (pessoaExistente.isPresent()) {
+        Pessoa pessoa = pessoaExistente.get();
+        pessoa.setNome(pessoaRequestDTO.nome());
+        pessoa.setCep(pessoaRequestDTO.cep());
+        pessoa.setEmail(pessoaRequestDTO.email());
+        System.out.println(pessoaRequestDTO.password());
+    
 
-            // Atualizar e criptografar a nova senha, se fornecida
+        // Verificar se a senha foi fornecida, se sim, atualizar a senha
+        if (pessoaRequestDTO.password() != null && !pessoaRequestDTO.password().isEmpty()) {
             pessoa.setPassword(pessoaRequestDTO.password());
-
-            Pessoa pessoaAtualizada = pessoaRepository.save(pessoa);
-            return new PessoaResponseDTO(pessoaAtualizada);
-        } else {
-            throw new RuntimeException("Pessoa não encontrada para o ID: " + idPessoa);
         }
+
+        Pessoa pessoaAtualizada = pessoaRepository.save(pessoa);
+        return new PessoaResponseDTO(pessoaAtualizada);
+    } else {
+        throw new RuntimeException("Pessoa não encontrada para o ID: " + idPessoa);
     }
+   }
+
 
     // Método para deletar uma pessoa
-    public String deletar(Long idPessoa) {
+    public boolean deletar(Long idPessoa) {
         Optional<Pessoa> pessoa = pessoaRepository.findById(idPessoa);
         if (pessoa.isPresent()) {
             pessoaRepository.deleteById(idPessoa);
-            return "Pessoa deletada com sucesso!";
+            return true;
         } else {
             throw new RuntimeException("Pessoa não encontrada para o ID: " + idPessoa);
         }
