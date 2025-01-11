@@ -4,7 +4,6 @@ import com.emakers.api_back.data.dto.request.PessoaRequestDTO;
 import com.emakers.api_back.data.dto.response.PessoaResponseDTO;
 import com.emakers.api_back.data.entity.Pessoa;
 import com.emakers.api_back.repository.PessoaRepository;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

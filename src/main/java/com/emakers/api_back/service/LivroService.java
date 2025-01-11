@@ -89,22 +89,30 @@ public class LivroService {
             throw new RuntimeException("Livro não encontrado para o ID: " + idLivro);
         }
     }
-       public LivroResponseDTO registrarPorIsbn(String isbn) {
+    
+    public LivroResponseDTO registrarPorIsbn(String isbn) {
 
         LivroApiResponseDTO livroApiResponse = livroApiService.buscarLivroPorIsbn(isbn);
-
+    
         Livro livro = new Livro();
         livro.setNome(livroApiResponse.getTitle());
         livro.setAutor(String.join(", ", livroApiResponse.getAuthors()));
-
+    
         int ano = livroApiResponse.getYear();
         String data = ano + "-01-01";
         System.out.println(data);
-        livro.setData(java.sql.Date.valueOf(String.valueOf(data)));
+    
+        try {
+            livro.setData(java.sql.Date.valueOf(data));  // tenta converter a data
+        } catch (IllegalArgumentException e) {
+            // Se a data for inválida, define como null
+            livro.setData(null);
+        }
+    
         livro.setSituacao(true); 
-
+    
         Livro livroSalvo = livroRepository.save(livro);
-
+    
         return new LivroResponseDTO(livroSalvo);
     }
     

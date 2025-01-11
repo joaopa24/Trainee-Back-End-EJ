@@ -1,19 +1,17 @@
 package com.emakers.api_back.data.dto.response;
 
-import com.emakers.api_back.data.entity.Emprestimo;
 import com.emakers.api_back.data.entity.Livro;
-
+import java.sql.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public record LivroResponseDTO(
-
     Long idLivro,
     String nome,
     String autor,
-    java.sql.Date data,
+    Date data,
     Boolean situacao,
-    List<Emprestimo> emprestimos
-
+    List<EmprestimoResponseDTO> emprestimos
 ) {
     public LivroResponseDTO(Livro livro) {
         this(
@@ -22,7 +20,9 @@ public record LivroResponseDTO(
             livro.getAutor(),
             livro.getData(),
             livro.getSituacao(),
-            livro.getEmprestimos()
+            livro.getEmprestimos().stream()
+                .map(EmprestimoResponseDTO::new) // Mapeando os empréstimos para o DTO
+                .collect(Collectors.toList())
         );
     }
 }

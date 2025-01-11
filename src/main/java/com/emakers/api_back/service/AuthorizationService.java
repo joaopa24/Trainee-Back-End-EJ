@@ -19,8 +19,7 @@ public class AuthorizationService implements UserDetailsService {
     PessoaRepository repository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;  // Certifique-se de que o PasswordEncoder está sendo injetado corretamente
-
+    private PasswordEncoder passwordEncoder;  
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return repository.findByEmail(email);
@@ -33,23 +32,18 @@ public class AuthorizationService implements UserDetailsService {
             return false; 
         }
 
-        // Verificar se a senha fornecida corresponde à senha armazenada
         System.out.println(data.password());
-        System.out.println("-----------");
         System.out.println(user.getPassword());
         if (!passwordEncoder.matches(data.password(), user.getPassword())) {
-            System.out.println("DEUUUUUUUUU ERRRADOOOOOOOOO");
             return false;  // Senha inválida
         }
 
         UsernamePasswordAuthenticationToken authenticationToken = 
         new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         System.out.println(authenticationToken);
-        // Atualizar o SecurityContextHolder com o objeto de autenticação
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         
-        // Aqui você pode fazer o processo de autenticação, se necessário
-        return true;  // Autenticação bem-sucedida
+        return true;  
     }
 
 }

@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  # Serviço para a aplicação Spring Boot
+  springboot-app:
+    build:
+      context: .  # Diretório onde o Dockerfile da aplicação Spring Boot está
+    ports:
+      - "8080:8080"  # Expondo a porta 8080 (alterar se sua aplicação usar outra)
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/api-back  # Conexão com o banco PostgreSQL rodando na máquina local
+      SPRING_DATASOURCE_USERNAME: postgres  # Nome do usuário do banco de dados local
+      SPRING_DATASOURCE_PASSWORD: 123  # Senha do banco de dados local
+    networks:
+      - backend
+    command: java -jar /app/app.jar  # Comando para rodar o Spring Boot
+
+networks:
+  backend:
+    driver: bridge

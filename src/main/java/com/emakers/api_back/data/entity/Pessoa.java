@@ -43,16 +43,12 @@ public class Pessoa implements UserDetails {
     @OneToMany(mappedBy = "pessoa", fetch = FetchType.EAGER)
     private List<Emprestimo> emprestimos;
 
-    // Método para encriptar a senha usando BCrypt
     public void setPassword(String password) {
         this.password = password;
     }
 
-    // Implementação da interface UserDetails
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Agora a autoridade é simplesmente o papel armazenado como String
         return List.of(new SimpleGrantedAuthority(role));
     }
 
@@ -63,7 +59,7 @@ public class Pessoa implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.email; // Usamos o email como identificador único do usuário
+        return this.email;
     }
 
     @Override

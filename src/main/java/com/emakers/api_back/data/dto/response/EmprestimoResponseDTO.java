@@ -17,4 +17,5 @@ public record EmprestimoResponseDTO(
             emprestimo.getDataDevolucao()
         );
     }
+
 }

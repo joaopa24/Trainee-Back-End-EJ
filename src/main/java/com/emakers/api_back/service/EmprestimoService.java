@@ -1,8 +1,11 @@
 package com.emakers.api_back.service;
 
 import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.emakers.api_back.data.dto.response.EmprestimoResponseDTO;
 import com.emakers.api_back.data.entity.Emprestimo;
 import com.emakers.api_back.data.entity.Livro;
 import com.emakers.api_back.data.entity.Pessoa;
@@ -22,7 +25,7 @@ public class EmprestimoService {
     @Autowired
     private EmprestimoRepository emprestimoRepository;
 
-    public Emprestimo pegarEmprestado(Long idPessoa, Long idLivro) {
+    public EmprestimoResponseDTO pegarEmprestado(Long idPessoa, Long idLivro) {
         Pessoa pessoa = pessoaRepository.findById(idPessoa)
             .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
         Livro livro = livroRepository.findById(idLivro)
@@ -41,11 +44,14 @@ public class EmprestimoService {
         livro.setDisponivel(false);
         livroRepository.save(livro);
 
-        return emprestimoRepository.save(emprestimo);
+        // Salva o empréstimo e retorna o DTO
+        Emprestimo emprestimoSalvo = emprestimoRepository.save(emprestimo);
+        return new EmprestimoResponseDTO(emprestimoSalvo);
     }
 
-    public Emprestimo devolverLivro(Long idPessoa, Long idLivro) {
-        Emprestimo emprestimo = emprestimoRepository.findByPessoaIdPessoaAndLivroIdAndDataDevolucaoIsNull(idPessoa, idLivro)
+    public EmprestimoResponseDTO devolverLivro(Long idPessoa, Long idLivro) {
+        Emprestimo emprestimo = emprestimoRepository
+            .findByPessoaIdPessoaAndLivroIdAndDataDevolucaoIsNull(idPessoa, idLivro)
             .orElseThrow(() -> new RuntimeException("Empréstimo não encontrado ou já devolvido"));
 
         // Marca a data de devolução
@@ -56,6 +62,9 @@ public class EmprestimoService {
         livro.setDisponivel(true);
         livroRepository.save(livro);
 
-        return emprestimoRepository.save(emprestimo);
+        // Salva a devolução e retorna o DTO
+        Emprestimo emprestimoAtualizado = emprestimoRepository.save(emprestimo);
+        return new EmprestimoResponseDTO(emprestimoAtualizado);
     }
 }
+

@@ -7,10 +7,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.emakers.api_back.auth.SecurityConfig;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
 @SpringBootApplication
 @Import(SecurityConfig.class)
 //@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
@@ -19,19 +15,6 @@ import java.sql.SQLException;
 public class ApiBackApplication {
 
     public static void main(String[] args) {
-        // Testar a conexão com o banco de dados
-        String url = "jdbc:postgresql://localhost:5432/api-back"; // Substitua com sua URL de conexão
-        String user = "postgres"; // Substitua com seu usuário
-        String password = "123"; // Substitua com sua senha
-
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
-            System.out.println("Conexão bem-sucedida com o banco de dados!");
-        } catch (SQLException e) {
-            System.out.println("Erro ao conectar com o banco de dados: " + e.getMessage());
-            // Interrompe a execução da aplicação se a conexão falhar
-            System.exit(1);
-        }
-
         // Iniciar a aplicação Spring Boot
         SpringApplication.run(ApiBackApplication.class, args);
     }

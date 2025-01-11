@@ -1,6 +1,7 @@
 package com.emakers.api_back.data.entity;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -43,10 +44,5 @@ public class Livro {
 
     public void setDisponivel(boolean situacao) {
         this.situacao = situacao;
-    }
-
-    public void setDate(java.util.Date data2) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setDate'");
     }
 }

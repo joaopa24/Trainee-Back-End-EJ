@@ -11,8 +11,6 @@ public class LivroApiResponseDTO {
     private String synopsis;
     private int year;
 
-    // Getters and Setters
-
     public String getIsbn() {
         return isbn;
     }
