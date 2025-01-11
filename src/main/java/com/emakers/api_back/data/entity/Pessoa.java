@@ -59,7 +59,7 @@ public class Pessoa implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.email;
+        return this.email; 
     }
 
     @Override
