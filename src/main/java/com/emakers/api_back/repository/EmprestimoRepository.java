@@ -1,6 +1,7 @@
 package com.emakers.api_back.repository;
 
 import com.emakers.api_back.data.entity.Emprestimo;
+import com.emakers.api_back.data.entity.Pessoa;
 
 import feign.Param;
 
@@ -17,4 +18,6 @@ public interface EmprestimoRepository extends JpaRepository<Emprestimo, Long> {
     Optional<Emprestimo> findByPessoaIdPessoaAndLivroIdAndDataDevolucaoIsNull(
         @Param("pessoaId") Long pessoaId, 
         @Param("livroId") Long livroId);
+
+    int countByPessoaAndDataDevolucaoIsNull(Pessoa pessoa);
 }

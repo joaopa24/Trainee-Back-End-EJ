@@ -26,15 +26,28 @@ public class EmprestimoService {
     private EmprestimoRepository emprestimoRepository;
 
     public EmprestimoResponseDTO pegarEmprestado(Long idPessoa, Long idLivro) {
+        // Busca a pessoa pelo ID
         Pessoa pessoa = pessoaRepository.findById(idPessoa)
             .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+
+        // Busca o livro pelo ID
         Livro livro = livroRepository.findById(idLivro)
             .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
 
+        // Verifica se o livro está disponível para empréstimo
         if (!livro.isDisponivel()) {
             throw new RuntimeException("Livro não está disponível para empréstimo");
         }
 
+        // Verifica quantos livros a pessoa já tem emprestado e não devolvido
+        int emprestimosAtivos = emprestimoRepository.countByPessoaAndDataDevolucaoIsNull(pessoa);
+
+        // Lança exceção se a pessoa já tiver 3 livros não devolvidos
+        if (emprestimosAtivos >= 3) {
+            throw new RuntimeException("Limite de 3 livros emprestados não devolvidos alcançado.");
+        }
+
+        // Cria um novo empréstimo
         Emprestimo emprestimo = new Emprestimo();
         emprestimo.setPessoa(pessoa);
         emprestimo.setLivro(livro);
