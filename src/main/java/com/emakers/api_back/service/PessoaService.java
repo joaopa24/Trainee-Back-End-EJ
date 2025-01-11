@@ -46,7 +46,6 @@ public class PessoaService {
         pessoa.setEmail(pessoaRequestDTO.email());
 
         pessoa.setRole("user");
-        // Criptografar a senha antes de salvar
         pessoa.setPassword(pessoaRequestDTO.password());
 
         Pessoa pessoaSalva = pessoaRepository.save(pessoa);
@@ -61,8 +60,6 @@ public class PessoaService {
         pessoa.setNome(pessoaRequestDTO.nome());
         pessoa.setCep(pessoaRequestDTO.cep());
         pessoa.setEmail(pessoaRequestDTO.email());
-        System.out.println(pessoaRequestDTO.password());
-    
 
         // Verificar se a senha foi fornecida, se sim, atualizar a senha
         if (pessoaRequestDTO.password() != null && !pessoaRequestDTO.password().isEmpty()) {

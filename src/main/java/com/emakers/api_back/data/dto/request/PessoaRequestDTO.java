@@ -24,6 +24,9 @@ public record PessoaRequestDTO(
     @Size(min = 8, max = 100, message = "A senha deve ter entre 8 e 100 caracteres")
     String password,
 
+    @Size(min = 8, max = 15, message = "Role user ou admin")
+    String role,
+
     List<Long> emprestimos
 ) {
 
